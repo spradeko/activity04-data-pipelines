@@ -1,6 +1,6 @@
 ---
 title: "Activity 4"
-author: "Name"
+author: "spradeko"
 output: github_document
 ---
 
@@ -33,7 +33,10 @@ Knit your report with the `message = FALSE` R code chunk option and pay attentio
 Now, switch this option to `message = TRUE` and knit your report again.
 Discuss what is different when the `message` option is turned on (`TRUE`) and turned off (`FALSE`) for the previous code chunk.
 
+
 **Response**:
+
+Changing it to TRUE displays the extra 'attaching packages' info and FALSE takes it away from the knitted document.
 
 
 Turn the `message` option off and continue in this activity.
@@ -69,6 +72,7 @@ I try to be consistent with notation so here are some other forms that you might
 # function comes from.
 
 college_recent_grads <- readr::read_csv("data/recent-grads.csv")
+
 ```
 
 Notice that this dataset is in a folder called `data`.
@@ -78,7 +82,7 @@ You can view the entire dataset by clicking on the name of the data frame in the
 Explore and describe what the `message` option does in `load_data` code chunk.
 
 **Response**:
-
+When message is FALSE it doesn't desplay the extra column specification.
 
 Turn the `message` option off and continue in this activity.
 
@@ -121,8 +125,8 @@ Below is a blank R code chunk.
 Name this code chunk `college_grads_top`; you do not need to suppress messages.
 In this code chunk, type `college_recent_grads` to view the top few (first 10) entries of the dataset.
 
-```{r}
-
+```{r college_grads_top}
+college_recent_grads
 ```
 
 
@@ -177,7 +181,7 @@ You do not need to code anything.
 As you write this process, think of it as a series of steps and it might be helpful to start at the goal and work backwards.
 
 **Response**:
-
+Often, I'd have to use nested functions or take it line by line as functions and run several separate functions at a time.
 
 #### Using `{dplyr}`
 
@@ -185,8 +189,9 @@ In the R code chunk below, name it `rearrange_college`.
 
 Take the `college_recent_grads` dataset, *then* `arrange` the dataset by `unemployment_rate`.
 
-```{r}
-
+```{r rearrange_college}
+college_recent_grads %>%
+arrange(unemployment_rate)
 ```
 
 We have all of the information to answer our question (i.e., "Which major has the lowest unemployment rate?"), but it is not in an effective format.
@@ -198,12 +203,14 @@ Also, notice that by default when you *arrange* by a variable, it defaults to *a
 Use the pipeline that you made in the `rearrange_college` code chunk as the start to this solution, **then** `select` only the variables `rank`, `major`, and `unemployment_rate`.
 Name this code chunk `lowest_unemploy`.
 
-```{r}
-
+```{r lowest_unemploy}
+college_recent_grads %>%
+arrange(unemployment_rate) %>%
+select(rank,major,unemployment_rate)
 ```
 
 **Response**:
-
+It is very easy to follow all the steps I have taken to select out the information that I want.
 
 ![](README-img/noun_pause.png) **Planned Pause Point**: If you have any questions, contact your instructor. Otherwise feel free to continue on.
 
@@ -212,14 +219,16 @@ Name this code chunk `lowest_unemploy`.
 Using the `college_recent_grads` dataset and functions from `{dplyr}`, `arrange` the dataset by `sharewomen`, and `select` only `rank`, `major`, and `sharewomen`. 
 Name your code chunk `highest_prop_women`.
 
-```{r}
-
+```{r highest_prop_women}
+college_recent_grads %>%
+  arrange(desc(sharewomen)) %>%
+  select(rank,major,sharewomen) 
 ```
 
 Discuss your output as it relates to the research question.
 
 **Response**:
-
+The initial info displayed started at the lowest amount women in majors, I had to sort by descending to find the highest concentration.
 
 ![](README-img/noun_pause.png) **Planned Pause Point**: If you have any questions, contact your instructor. Otherwise feel free to continue on.
 
@@ -243,14 +252,17 @@ Using the `stem_categories` vector and knowledge that the median salary for all 
 Only display the variables `major`, `p25th`, `median`, and `p75th`
 Name the code chunk `stem_low_salaries`.
 
-```{r}
-
+```{r stem_low_salaries}
+college_recent_grads %>%
+filter(major_category %in% stem_categories) %>% 
+filter(median < 36000) %>% 
+select(major,p25th,median,p75th)
 ```
 
 Discuss your output as it relates to the research question.
 
 **Response**:
-
+It took a little finagling to get the code organized how I wanted it but I like how easy it is to read and display with so few functions!
 
 ![](README-img/noun_pause.png) **(Final) Planned Pause Point**: If you have any questions, contact your instructor. Otherwise feel free to continue on.
 
